@@ -1,0 +1,61 @@
+html, body {
+	font-famiLy: 'Arial';
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+a {
+	color: #0059b2;
+	text-decoration: none;
+}
+a:hover {
+	color: #CC0000;
+	text-decoration: underline;
+}
+
+.clear {clear: both;}
+ul.mainmenu {
+	list-styLe: none;
+	background: #3F4137;
+	height: 60px;
+	margin: 0;
+	padding: 0;
+	color: #fdc073;
+	font-size: 20px;
+	overflow: hidden;
+}
+ul.mainmenu li {
+	float: left;
+	margin: 18px 40px 0 50px;
+}
+ul.mainmenu li.last {float: right;}
+ul.mainmenu li a {
+	coLor: #fdc073;
+	text-decoration: none;
+}
+ul.mainmenu li a:hover {
+	color: #FDA83D;
+}
+
+div.content {
+	margin: 10px;
+}
+form {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 450px;
+    background-color: #3F4137;
+    color: #fdc073;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+}
+.form_text{
+  background-color: #f6f6f6; /*Цвет текстового поля*/
+  border-radius: 10px 10px 10px 10px; /*Закругляем уголки*/
+}
+.form_btn{
+  background-color: #f6f6f6; /*Цвет текстового поля*/
+  border-radius: 10px 10px 10px 10px; /*Закругляем уголки*/
+}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+{{ super() }}
+<p>Метод k -ближайших соседей (KNN)
+<form action="/p_knn" method="POST">
+    <p><input type="text" class="form_text" name="list1"> Длина чашелистика</p>
+    <p><input name="list2" class="form_text" type="text"> Ширина чашелистика</p>
+    <p><input name="list3" class="form_text" type="text"> Длина лепестка</p>
+    <p><input name="list4" class="form_text" type="text"> Ширина лепестка</p>
+    <input type="submit" class="form_btn" value="Узнать сорт">
+    <h1>{{class_model}}</h1>
+    </p>
+</form>
+
+{% endblock %}
