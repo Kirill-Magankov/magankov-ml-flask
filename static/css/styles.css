@@ -58,4 +58,5 @@ form {
 .form_btn{
   background-color: #f6f6f6; /*Цвет текстового поля*/
   border-radius: 10px 10px 10px 10px; /*Закругляем уголки*/
+  cursor: pointer;
 }

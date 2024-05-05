@@ -1,4 +1,6 @@
+import math
 import pickle
+import warnings
 
 import numpy as np
 from flask import Flask, render_template, url_for, request
@@ -9,7 +11,12 @@ menu = [{"name": "Лаба 1", "url": "p_knn"},
         {"name": "Лаба 2", "url": "p_lab2"},
         {"name": "Лаба 3", "url": "p_lab3"}]
 
-loaded_model_knn = pickle.load(open('model/Iris_pickle_file', 'rb'))
+diabetes_model = pickle.load(open('model/diabetes.pickle', 'rb'))
+gender_shoe_model = pickle.load(open('model/shoe-size-gender.pickle', 'rb'))
+shoe_model = pickle.load(open('model/shoe-size_predict.pickle', 'rb'))
+
+diabetes_status = ["нет", "есть"]
+gender_list = ["женский", "мужской"]
 
 
 @app.route("/")
@@ -19,27 +26,43 @@ def index():
 
 @app.route("/p_knn", methods=['POST', 'GET'])
 def f_lab1():
-    if request.method == 'GET':
-        return render_template('lab1.html', title="Метод k -ближайших соседей (KNN)", menu=menu, class_model='')
-    if request.method == 'POST':
-        X_new = np.array([[float(request.form['list1']),
-                           float(request.form['list2']),
-                           float(request.form['list3']),
-                           float(request.form['list4'])]])
-        pred = loaded_model_knn.predict(X_new)
-        return render_template('lab1.html', title="Метод k -ближайших соседей (KNN)", menu=menu,
-                               class_model="Это: " + pred)
+    return render_template('lab1.html', title="Метод k -ближайших соседей (KNN)", menu=menu, class_model='')
 
 
-@app.route("/p_lab2")
+@app.route("/p_lab2", methods=['POST', 'GET'])
 def f_lab2():
+    if request.method == 'POST':
+        X_new = np.array([[float(request.form['height']),
+                           float(request.form['weight']),
+                           float(request.form['gender'])]])
+
+        pred = shoe_model.predict(X_new)
+
+        return render_template('lab2.html', title="Логистическая регрессия", menu=menu,
+                               class_model=f"Размер обуви: {math.ceil(pred[0])}")
+
     return render_template('lab2.html', title="Логистическая регрессия", menu=menu)
 
 
-@app.route("/p_lab3")
+@app.route("/p_lab3", methods=['POST', 'GET'])
 def f_lab3():
+    if request.method == 'POST':
+        X_new = np.array([[float(request.form['pregnancies']),
+                           float(request.form['glucose']),
+                           float(request.form['bloodPressure']),
+                           float(request.form['skinThickness']),
+                           float(request.form['insulin']),
+                           float(request.form['bmi']),
+                           float(request.form['age'])]])
+
+        pred = diabetes_model.predict(X_new)
+        return render_template('lab3.html', title="Логистическая регрессия", menu=menu,
+                               class_model=f"Диабет: {diabetes_status[pred[0]]}")
+
     return render_template('lab3.html', title="Логистическая регрессия", menu=menu)
 
 
+
 if __name__ == "__main__":
+    warnings.simplefilter('ignore')
     app.run(debug=True)

@@ -1,6 +1,29 @@
 {% extends 'base.html' %}
- 
+
 {% block content %}
 {{ super() }}
-<p>Логистическая регрессия для расчета стоимости жилья
+<p>Логистическая регрессия для определения размера обуви</p>
+<form method="POST">
+    <p>
+        <input class="form_text" placeholder="Рост" name="height" required>
+        Рост человека
+    </p>
+
+    <p>
+        <input class="form_text" placeholder="Вес" name="weight" required>
+        Вес человека
+    </p>
+
+    <p>
+        <select class="form_text" name="gender">
+            <option value="0" selected>Женский</option>
+            <option value="1">Мужской</option>
+        </select>
+        Пол
+    </p>
+
+    <input type="submit" class="form_btn" value="Узнать размер обуви">
+
+    <h1>{{class_model}}</h1>
+</form>
 {% endblock %}
