@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+<p>Бинарная классификация на основе дерева решений</p>
+
+<form method="POST">
+    <p>
+        <input class="form_text" placeholder="Беременность" name="pregnancies" value="0" required>
+        Беременность (месяцев)
+    </p>
+
+    <p>
+        <input class="form_text" placeholder="Уровень глюкозы" name="glucose" required>
+        Уровень глюкозы (мг/дл)
+    </p>
+
+    <p>
+        <input class="form_text" placeholder="Давление" name="bloodPressure" required>
+        Давление
+    </p>
+
+    <p>
+        <input class="form_text" placeholder="Толщина кожи" name="skinThickness" required>
+        Толщина кожи (мм)
+    </p>
+
+    <p>
+        <input class="form_text" placeholder="Инсулин" name="insulin" required>
+        Инсулин (пмоль/л)
+    </p>
+
+    <p>
+        <input class="form_text" placeholder="BMI" name="bmi" required>
+        Индекс массы тела
+    </p>
+
+
+    <p>
+        <input class="form_text" placeholder="Возраст" name="age" required>
+        Возраст
+    </p>
+
+    <p style="font-size: 14px">Примечание: <br/>
+        для перевода ммоль/л в мг/дл - значение умножается на 18 <br>
+        инсулин - мЕд/л = мкЕд/мл; пмоль/л х 0,138 = мкЕд/мл.
+    </p>
+
+    <input type="submit" class="form_btn" value="Определить диабет">
+
+    <h1>{{class_model}}</h1>
+</form>
+
+{% endblock %}
