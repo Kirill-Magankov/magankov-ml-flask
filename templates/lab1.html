@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
- 
+
 {% block content %}
 {{ super() }}
 <p>Метод k -ближайших соседей (KNN)
@@ -14,15 +14,18 @@
         Вес человека
     </p>
 
-      <p>
+    <p>
         <input class="form_text" placeholder="Размер обуви" name="shoeSize" required>
         Размер обуви
     </p>
-
 
     <input type="submit" class="form_btn" value="Узнать пол">
 
     <h1>{{class_model}}</h1>
 </form>
+
+{% with data=metrics %}
+{% include 'includes/metrics.html' %}
+{% endwith %}
 
 {% endblock %}

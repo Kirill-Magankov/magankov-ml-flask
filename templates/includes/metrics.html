@@ -1,0 +1,9 @@
+<h1>Метрики качества</h1>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">
+    {% for item in data %}
+    <div>
+        <h3>{{item.title}}</h3>
+        <pre>{{item.value|safe}}</pre>
+    </div>
+    {% endfor %}
+</div>

@@ -51,4 +51,8 @@
     <h1>{{class_model}}</h1>
 </form>
 
+{% with data=metrics %}
+{% include 'includes/metrics.html' %}
+{% endwith %}
+
 {% endblock %}
