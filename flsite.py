@@ -5,7 +5,7 @@ from enum import Enum, auto
 
 import numpy as np
 import pandas as pd
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, jsonify
 from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error, mean_absolute_error, r2_score, \
     accuracy_score, precision_score, recall_score, f1_score
 
@@ -156,6 +156,65 @@ def f_lab4():
                                class_model=f"Диабет: {diabetes_status[pred[0]]}", metrics=metrics)
 
     return render_template('lab4.html', title="Древо решений", menu=menu, metrics=metrics)
+
+
+api_endpoint = "/api/v1"
+
+
+@app.route(f'{api_endpoint}/knn', methods=['POST'])
+def api_knn_get():
+    request_data = request.get_json()
+
+    X_new = np.array([[float(request_data['height']),
+                       float(request_data['weight']),
+                       float(request_data['shoeSize'])]])
+
+    pred = gender_shoe_model.predict(X_new)
+    return jsonify(msg=f"Gender: {gender_list[pred[0]]}")
+
+
+@app.route(f'{api_endpoint}/shoeSize', methods=['POST'])
+def api_shoe_size_get():
+    request_data = request.get_json()
+
+    X_new = np.array([[float(request_data['height']),
+                       float(request_data['weight']),
+                       float(request_data['gender'])]])
+
+    pred = shoe_model.predict(X_new)
+    return jsonify(msg=f"Shoe size: {math.ceil(pred[0])}")
+
+
+@app.route(f'{api_endpoint}/diabetes', methods=['POST'])
+def api_diabetes_get():
+    request_data = request.get_json()
+
+    X_new = np.array([[float(request_data['pregnancies']),
+                       float(request_data['glucose']),
+                       float(request_data['bloodPressure']),
+                       float(request_data['skinThickness']),
+                       float(request_data['insulin']),
+                       float(request_data['bmi']),
+                       float(request_data['age'])]])
+
+    pred = diabetes_model.predict(X_new)
+    return jsonify(msg=f"Diabetes: {diabetes_status[pred[0]]}")
+
+
+@app.route(f'{api_endpoint}/diabetesTree', methods=['POST'])
+def api_diabetes_tree_get():
+    request_data = request.get_json()
+
+    X_new = np.array([[float(request_data['pregnancies']),
+                       float(request_data['glucose']),
+                       float(request_data['bloodPressure']),
+                       float(request_data['skinThickness']),
+                       float(request_data['insulin']),
+                       float(request_data['bmi']),
+                       float(request_data['age'])]])
+
+    pred = diabetes_tree_model.predict(X_new)
+    return jsonify(msg=f"Diabetes: {diabetes_status[pred[0]]}")
 
 
 if __name__ == "__main__":
