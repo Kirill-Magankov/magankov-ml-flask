@@ -1,3 +1,4 @@
+import json
 import math
 import pickle
 import warnings
@@ -51,7 +52,7 @@ def get_regression_metrics(model_type: ModelTypes):
             {"title": "R-Квадрат", "value": round(r2_score(y_test, y_pred), 4)}]
 
 
-def get_classification_metrics(model_type: ModelTypes):
+def get_classification_metrics(model_type: ModelTypes, to_json=False):
     if model_type == ModelTypes.GENDER_SHOE:
         y_test, x_test = get_shoe_size_gender_test_set()
         y_pred = gender_shoe_model.predict(x_test)  # noqa
@@ -71,7 +72,7 @@ def get_classification_metrics(model_type: ModelTypes):
     df = pd.DataFrame(frame, columns=['y_Actual', 'y_Predicted'])
     confusion_matrix = pd.crosstab(df['y_Actual'], df['y_Predicted'], rownames=['Actual'], colnames=['Predicted'])
 
-    return [{"title": "Confusion matrix", "value": confusion_matrix},
+    return [{"title": "Confusion matrix", "value": confusion_matrix.to_dict() if to_json else confusion_matrix},
             {"title": "Accuracy", "value": round(accuracy_score(y_test, y_pred), 4)},
             {"title": "Precision", "value": round(precision_score(y_test, y_pred), 4)},
             {"title": "Recall", "value": round(recall_score(y_test, y_pred), 4)},
@@ -215,6 +216,18 @@ def api_diabetes_tree_get():
 
     pred = diabetes_tree_model.predict(X_new)
     return jsonify(msg=f"Diabetes: {diabetes_status[pred[0]]}")
+
+
+@app.route(f'{api_endpoint}/metrics', methods=['GET'])
+def api_metrics_get():
+    metrics = {
+        "diabetes_decision_tree": get_classification_metrics(ModelTypes.DIABETES_TREE, True),
+        "diabetes_model": get_classification_metrics(ModelTypes.DIABETES, True),
+        "gender_shoe_model": get_classification_metrics(ModelTypes.GENDER_SHOE, True),
+        "shoe_model": get_regression_metrics(ModelTypes.SHOE_MODEL)
+    }
+
+    return jsonify(msg=metrics)
 
 
 if __name__ == "__main__":
