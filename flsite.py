@@ -133,10 +133,10 @@ def f_lab3():
                            float(request.form['age'])]])
 
         pred = diabetes_model.predict(X_new)
-        return render_template('lab3.html', title="Логистическая регрессия", menu=menu,
+        return render_template('lab3.html', title="Классификация", menu=menu,
                                class_model=f"Диабет: {diabetes_status[pred[0]]}", metrics=metrics)
 
-    return render_template('lab3.html', title="Логистическая регрессия", menu=menu, metrics=metrics)
+    return render_template('lab3.html', title="Классификация", menu=menu, metrics=metrics)
 
 
 @app.route("/p_lab4", methods=['POST', 'GET'])
