@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {{ super() }}
+    <p>Нейрон для классификации уровня дохода
+    <form method="POST">
+        <p>
+            <input class="form_text" placeholder="Возраст" name="age" required>
+            Возраст
+        </p>
+
+        <p>
+            <input class="form_text" placeholder="Доход" name="income" required>
+            Доход (тыс. руб.)
+        </p>
+
+        <p>
+            <input class="form_text" placeholder="Стаж" name="experience" required>
+            Стаж (лет)
+        </p>
+
+        <input type="submit" class="form_btn" value="Узнать уровень дохода">
+
+        <h1>{{ class_model }}</h1>
+    </form>
+
+{% endblock %}

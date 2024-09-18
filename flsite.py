@@ -10,14 +10,21 @@ from flask import Flask, render_template, url_for, request, jsonify
 from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error, mean_absolute_error, r2_score, \
     accuracy_score, precision_score, recall_score, f1_score
 
+from model.neuron.neuron import SingleNeuron
 from model.test_split import get_shoe_size_test_set, get_shoe_size_gender_test_set, get_diabetes_test_set
+
+new_neuron = SingleNeuron(input_size=3)
+new_neuron.load_weights('model/neuron/neuron_weights.txt')
 
 app = Flask(__name__)
 
-menu = [{"name": "Лаба 1", "url": "p_knn"},
-        {"name": "Лаба 2", "url": "p_lab2"},
-        {"name": "Лаба 3", "url": "p_lab3"},
-        {"name": "Лаба 4", "url": "p_lab4"}]
+menu = [
+    {"name": "Лаба 1", "url": "p_knn"},
+    {"name": "Лаба 2", "url": "p_lab2"},
+    {"name": "Лаба 3", "url": "p_lab3"},
+    {"name": "Лаба 4", "url": "p_lab4"},
+    {"name": "Лаба 5", "url": "p_lab5"},
+]
 
 diabetes_model = pickle.load(open('model/diabetes.pickle', 'rb'))
 diabetes_tree_model = pickle.load(open('model/diabetes_decision_tree.pickle', 'rb'))
@@ -159,6 +166,24 @@ def f_lab4():
     return render_template('lab4.html', title="Древо решений", menu=menu, metrics=metrics)
 
 
+@app.route("/p_lab5", methods=['POST', 'GET'])
+def f_lab():
+    if request.method == 'GET':
+        return render_template('lab5.html', title="Первый нейрон", menu=menu, class_model='')
+
+    if request.method == 'POST':
+        X_new = np.array([[
+            float(request.form['age']) - 35,
+            float(request.form['income']) - 60_000,
+            float(request.form['experience']),
+        ]])
+
+        pred = new_neuron.forward(X_new)
+        return render_template('lab5.html', title="Первый нейрон", menu=menu,
+                               class_model=f"Доход: {np.where(pred >= 0.5, 'Высокий', 'Низкий')}")
+
+
+# region Api Endpoints
 api_endpoint = "/api/v1"
 
 
@@ -229,6 +254,8 @@ def api_metrics_get():
 
     return jsonify(msg=metrics)
 
+
+# endregion
 
 if __name__ == "__main__":
     warnings.simplefilter('ignore')
