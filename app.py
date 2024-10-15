@@ -2,8 +2,7 @@ import math
 import warnings
 
 import numpy as np
-import pandas as pd
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, request
 
 from api import rest_api
 from helpers import get_classification_metrics, ModelTypes, gender_list, gender_shoe_model, get_regression_metrics, \

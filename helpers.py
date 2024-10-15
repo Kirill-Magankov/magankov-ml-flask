@@ -1,5 +1,6 @@
 import pickle
 from enum import Enum, auto
+import tensorflow as tf
 
 import math
 import numpy as np
@@ -21,6 +22,9 @@ shoe_model = pickle.load(open('model/shoe-size_predict.pickle', 'rb'))
 
 diabetes_status = ["нет", "есть"]
 gender_list = ["женский", "мужской"]
+
+model_class = tf.keras.models.load_model('model/tensorflow/classification_model.h5')  # noqa
+model_reg = tf.keras.models.load_model('model/tensorflow/regression_model.h5')  # noqa
 
 
 class ModelTypes(Enum):

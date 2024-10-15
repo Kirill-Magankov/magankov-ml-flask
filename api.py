@@ -3,11 +3,47 @@ import numpy as np
 from flask import Blueprint, jsonify, request
 
 from helpers import get_classification_metrics, ModelTypes, gender_list, gender_shoe_model, get_regression_metrics, \
-    shoe_model, diabetes_model, diabetes_status, diabetes_tree_model, new_neuron
+    shoe_model, diabetes_model, diabetes_status, diabetes_tree_model, new_neuron, model_class, model_reg
 
 rest_api = Blueprint('api', __name__, )
 
 
+# region Tensorflow
+@rest_api.route('/tensorflow-regression', methods=['POST'])
+def tensorflow_regression_get():
+    data = request.get_json()
+    print(data)
+    input_data = np.array([[
+        int(data.get('temperature')),
+        int(data.get('humidity')),
+        int(data.get('wind_speed')),
+    ]])
+
+    pred = model_reg.predict(input_data)[0][0]
+    print(pred)
+    return jsonify(
+        msg=f"Потребление энергии: {round(float(pred), 2)} (киловатт-часы)",
+        inputs=data,
+    )
+
+
+@rest_api.route('/tensorflow-classification', methods=['POST'])
+def tensorflow_classification_get():
+    data = request.get_json()
+    input_data = np.array([[
+        int(data.get('age')) - 35,
+        int(data.get('income')) - 65_000,
+        int(data.get('experience')),
+    ]])
+
+    pred = model_class.predict(input_data)
+    result = np.where(pred > 0.5, "Высокий", "Низкий")[0][0]
+    return jsonify(msg=f"Уровень дохода: {result}", probability=str(round(pred[0][0], 6)))
+
+
+# endregion
+
+# region Basic Models
 @rest_api.route('/knn', methods=['POST'])
 def api_knn_get():
     request_data = request.get_json()
@@ -20,7 +56,7 @@ def api_knn_get():
     return jsonify(msg=f"Gender: {gender_list[pred[0]]}")
 
 
-@rest_api.route('/shoeSize', methods=['POST'])
+@rest_api.route('/shoe-size', methods=['POST'])
 def api_shoe_size_get():
     request_data = request.get_json()
 
@@ -48,7 +84,7 @@ def api_diabetes_get():
     return jsonify(msg=f"Diabetes: {diabetes_status[pred[0]]}")
 
 
-@rest_api.route('/diabetesTree', methods=['POST'])
+@rest_api.route('/diabetes-tree', methods=['POST'])
 def api_diabetes_tree_get():
     request_data = request.get_json()
 
@@ -74,3 +110,4 @@ def api_metrics_get():
     }
 
     return jsonify(msg=metrics)
+# endregion
