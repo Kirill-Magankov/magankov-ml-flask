@@ -12,7 +12,6 @@ rest_api = Blueprint('api', __name__, )
 @rest_api.route('/tensorflow-regression', methods=['POST'])
 def tensorflow_regression_get():
     data = request.get_json()
-    print(data)
     input_data = np.array([[
         int(data.get('temperature')),
         int(data.get('humidity')),
@@ -20,7 +19,6 @@ def tensorflow_regression_get():
     ]])
 
     pred = model_reg.predict(input_data)[0][0]
-    print(pred)
     return jsonify(
         msg=f"Потребление энергии: {round(float(pred), 2)} (киловатт-часы)",
         inputs=data,
